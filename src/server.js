@@ -1,5 +1,5 @@
 // Welcome to the tutorial!
-import {createServer, Model, hasMany, belongsTo} from "miragejs";
+import {createServer, Model, hasMany, belongsTo, RestSerializer} from "miragejs";
 
 export default function () {
   createServer({
@@ -10,6 +10,13 @@ export default function () {
 
       reminder: Model.extend({
         list: belongsTo(),
+      }),
+    },
+
+    serializers: {
+      reminder: RestSerializer.extend({
+        include: ["list"],
+        embed: true,
       }),
     },
 
