@@ -7,6 +7,12 @@ export default function () {
       reminder: Model,
     },
 
+    seeds(server) {
+      server.create("reminder", { text: "Walk the dog" });
+      server.create("reminder", { text: "Tale out the trash" });
+      server.create("reminder", { text: "Work out" });
+    },
+
     routes() {
       this.get("/api/reminders", (schema) => {
         return schema.reminders.all();
