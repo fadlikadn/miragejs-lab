@@ -1,5 +1,13 @@
 // Welcome to the tutorial!
-import {createServer, Model, hasMany, belongsTo, RestSerializer} from "miragejs";
+import {
+  createServer,
+  Model,
+  hasMany,
+  belongsTo,
+  RestSerializer,
+  Factory,
+  trait,
+} from "miragejs";
 
 export default function () {
   createServer({
@@ -20,16 +28,75 @@ export default function () {
       }),
     },
 
+    factories: {
+      list: Factory.extend({
+        name(i) {
+          return `List ${i}`;
+        },
+
+        // afterCreate(list, server) {
+        //   if(!list.reminders.length) {
+        //     server.createList("reminder", 5, { list });
+        //   }
+        // },
+        withReminders: trait({
+          afterCreate(list, server) {
+            server.createList("reminder", 5, { list });
+          },
+        }),
+      }),
+      reminder: Factory.extend({
+        // text: "Reminder text",
+        text(i) {
+          return `Reminder text ${i}`;
+        },
+      }),
+    },
+
     seeds(server) {
       server.create("reminder", { text: "Walk the dog" });
       server.create("reminder", { text: "Tale out the trash" });
       server.create("reminder", { text: "Work out" });
+      server.create("list", {
+        name: "Home",
+        reminders: [server.create("reminder", { text: "Do taxes" })],
+      });
+      server.create("list", {
+        name: "Work",
+        reminders: [server.create("reminder", { text: "Visit bank" })],
+      });
 
-      let homeList = server.create("list", { name: "Home" });
-      server.create("reminder", { list: homeList, text: "Do taxes" });
+      // Experiment #3
+      // server.create("list", {
+      //   name: "Home",
+      //   reminders: [server.create("reminder", { text: "Do taxes" })],
+      // });
+      //
+      // server.create("list", "withReminders");
 
-      let workList = server.create("list", { name: "Work" });
-      server.create("reminder", { list: workList, text: "Visit bank" });
+      // Experiment #2
+      // server.createList("list", 3);
+      // server.create("list");
+
+      // Experiment #1
+      // server.create("reminder", { text: "Walk the dog" });
+      // server.create("reminder", { text: "Tale out the trash" });
+      // server.create("reminder", { text: "Work out" });
+      //
+      // server.create("reminder");
+      // server.create("reminder");
+      // server.create("reminder");
+      // server.createList("reminder", 100);
+      //
+      // server.create("list", {
+      //   reminders: server.createList("reminder", 5),
+      // });
+      //
+      // let homeList = server.create("list", { name: "Home" });
+      // server.create("reminder", { list: homeList, text: "Do taxes" });
+      //
+      // let workList = server.create("list", { name: "Work" });
+      // server.create("reminder", { list: workList, text: "Visit bank" });
     },
 
     routes() {
