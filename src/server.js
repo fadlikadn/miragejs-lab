@@ -9,8 +9,9 @@ import {
   trait,
 } from "miragejs";
 
-export default function () {
+export default function (environment = "development") {
   createServer({
+    environment,
     models: {
       list: Model.extend({
         reminders: hasMany(),
