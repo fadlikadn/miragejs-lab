@@ -73,7 +73,7 @@ export default function (environment = "development") {
       //   reminders: [server.create("reminder", { text: "Do taxes" })],
       // });
       //
-      // server.create("list", "withReminders");
+      server.create("list", "withReminders");
 
       // Experiment #2
       // server.createList("list", 3);
